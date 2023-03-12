@@ -1,35 +1,46 @@
 <template>
     <!-- asigning rules with validation-schema -->
     <div class="wrapper">
-        <vee-form @submit="onSubmit" :validation-schema="schema">
+
+        <vee-form @submit="onSubmit" :validation-schema="schema" :initial-values="userData">
             <div class="text">
                 <h2>Form + Vuelidate</h2>
             </div>
+            <div class="laoding" v-if="reg_show_alert" :class="reg_alert_variant">{{ reg_alert_msg }}</div>
             <div class="inputs">
                 <label for="">Username</label>
                 <vee-field name="username" type="text" placeholder="username" />
                 <ErrorMessage class="errorMessage" name="username" />
+
                 <label for="">Email</label>
                 <vee-field name="email" type="text" placeholder="email" />
                 <ErrorMessage class="errorMessage" name="email" />
+
                 <label for="">Age</label>
                 <vee-field name="age" min="18" type="number" placeholder="age" />
                 <ErrorMessage class="errorMessage" name="age" />
+
                 <label for="">Password</label>
-                <vee-field name="password" type="password" placeholder="password" />
-                <ErrorMessage class="errorMessage" name="password" />
+                <vee-field name="password" :bails="false" v-slot="{ field, errors }">
+                    <input placeholder="password" type="password" v-bind="field" />
+                    <div class="errorMessage" v-for="error in errors" :key="error">{{ error }}</div>
+                </vee-field>
+
                 <label for="">Confirm password</label>
                 <vee-field name="confirm_password" type="password" placeholder="confirm_password" />
                 <ErrorMessage class="errorMessage" name="confirm_password" />
+
                 <vee-field as="select" name="country">
                     <option disabled value="">Choose the Country</option>
                     <option value="Uzbekistan">Uzbekistan</option>
                     <option value="Russia">Russia</option>
-                    <option value="Turkia">Turkia</option>
+                    <option value="Turkey">Turkey</option>
                 </vee-field>
+                <ErrorMessage class="errorMessage" name="country" />
+
             </div>
             <div class="buttons">
-                <button type="submit">Log in</button>
+                <button :disabled="reg_in_submission" type="submit">Log in</button>
             </div>
         </vee-form>
     </div>
@@ -46,14 +57,27 @@ export default {
                 email: "required|min:4|max:100|email",
                 age: "required|min_value:18|max_value:120",
                 password: "required|min:4|max:100",
-                confirm_password:"confirmed:@password",
-                country:""
-            }
+                confirm_password: "passwords_mismatch:@password",
+                country: "required"
+            },
+            userData: {
+                country: "Turkey"
+            },
+            reg_in_submission: false,
+            reg_show_alert: false,
+            reg_alert_variant: "blueMessage",
+            reg_alert_msg: "Please wait! Your account is being created.",
+
         };
     },
     methods: {
-        onSubmit() {
-            console.log(this.schema)
+        onSubmit(values) {
+            values.username= null,
+            values.email = null
+            this.reg_in_submission = true;
+            this.reg_show_alert = true;
+            this.reg_alert_variant = "greenMessage",
+            this.reg_alert_msg = "success! Your account is being created."
         }
     },
     components: { ErrorMessage }
@@ -66,6 +90,24 @@ export default {
     align-items: center;
     justify-content: center;
     height: 100vh;
+}
+
+.blueMessage {
+    background-color: rgba(0, 0, 255, 0.873)
+}
+
+.greenMessage {
+    background-color: rgb(11, 188, 11);
+    border-radius: 15px;
+}
+
+.loading {
+    color: white;
+    text-align: center;
+    font-weight: bold;
+    padding: 7px;
+    border-radius: 5px;
+    margin-bottom: 7px;
 }
 
 .text {
