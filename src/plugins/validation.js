@@ -11,8 +11,6 @@ export default {
         app.component('VeeField', VeeField);
         app.component('ErrorMessage', ErrorMessage);
 
-
-
         defineRule('required', required);
         defineRule('min', min);
         defineRule('max', max);
@@ -39,10 +37,10 @@ export default {
                     messages[context.rule.name] : `The field ${context.field} is invalid `
                 return message;
             },
-            validateOnBlur:true,
-            validateOnChange:true,
-            validateOnInput:false,
-            validateOnModelUpdate:true 
+            // validateOnBlur:true,
+            // validateOnChange:true,
+            validateOnInput:true,
+            // validateOnModelUpdate:true 
         })
 
     },

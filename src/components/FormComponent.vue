@@ -21,11 +21,12 @@
                 <ErrorMessage class="errorMessage" name="age" />
 
                 <label for="">Password</label>
-                <vee-field name="password" :bails="false" v-slot="{ field, errors }">
+                <!-- <vee-field name="password" :bails="false" v-slot="{ field, errors }">
                     <input placeholder="password" type="password" v-bind="field" />
                     <div class="errorMessage" v-for="error in errors" :key="error">{{ error }}</div>
-                </vee-field>
-
+                </vee-field> -->
+                <vee-field name="password" type="password" placeholder="password"/>
+                <ErrorMessage class="errorMessage" name="password"/>
                 <label for="">Confirm password</label>
                 <vee-field name="confirm_password" type="password" placeholder="confirm_password" />
                 <ErrorMessage class="errorMessage" name="confirm_password" />
